@@ -1,0 +1,66 @@
+version: '3.8'
+
+# Prefixes:
+# - cds: card-deck-server
+
+services:
+  cds:
+    image: docker.pkg.github.com/cardsity/card-deck-server/cardsity-deck-server:latest
+    restart: always
+    networks:
+      - cardsity
+    depends_on:
+      - cds_db
+    env_file:
+      - cds.env
+    environment:
+      DJANGO_AUTOMATIC_MIGRATE: 'yes'
+      DJANGO_COLLECTSTATIC: 'yes'
+    volumes:
+      - cds_static:/app/static
+
+  cds_db:
+    image: mariadb
+    restart: always
+    networks:
+      - cardsity
+    environment:
+      MYSQL_USER: cds
+      MYSQL_DATABASE: cds
+      MYSQL_PASSWORD_FILE: /run/secrets/cds_db_pw
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/cds_db_root
+    secrets:
+      - cds_db_root
+      - cds_db_pw
+    volumes:
+      - cds_db:/var/lib/mysql
+
+  client:
+    image: docker.pkg.github.com/cardsity/vue-client/cardsity-vue-client:latest
+    restart: always
+    networks:
+      - cardsity
+    depends_on:
+      - cds
+      - server
+
+  server:
+    image:
+    restart: always
+    depends_on:
+      - cds
+    ports:
+      - "9012:9012"
+
+volumes:
+  cds_db:
+  cds_static:
+
+secrets:
+  cds_db_root:
+    file: cds_db_root.txt
+  cds_db_pw:
+    file: cds_db_pw.txt
+
+networks:
+  cardsity:
