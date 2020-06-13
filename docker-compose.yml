@@ -45,6 +45,8 @@ services:
       - cds
     ports:
       - "9012:9012"
+    volumes:
+    - ./ssl:/app/cert
 
   nginx:
     build: .
