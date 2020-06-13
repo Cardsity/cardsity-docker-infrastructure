@@ -39,6 +39,8 @@ services:
   server:
     image: docker.pkg.github.com/cardsity/game-server/cardsity-game-server:latest
     restart: always
+    networks:
+      - cardsity
     depends_on:
       - cds
     ports:
