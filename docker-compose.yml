@@ -58,9 +58,10 @@ services:
     volumes:
       - cds_static:/var/www/deck-server:ro
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - /etc/letsencrypt/:/ssl/:ro
     ports:
       - "80:80"
-      - "8020:8020"
+      - "443:443"
 
 volumes:
   cds_db:
