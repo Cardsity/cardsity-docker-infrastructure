@@ -75,7 +75,7 @@ MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
 EOF
 
 # Make the directory for the ssl certificates
-mkdir ssl
+mkdir -p ssl
 
 # Echo final messages
 # TODO: Update the url to the right page

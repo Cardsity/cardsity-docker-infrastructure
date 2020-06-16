@@ -11,14 +11,15 @@ services:
       - cardsity
     depends_on:
       - cds_db
-    env_file:
-      - cds.env
     environment:
       DJANGO_AUTOMATIC_MIGRATE: 'yes'
       DJANGO_COLLECTSTATIC: 'yes'
+      SLEEP: "10"
+      SECRET_KEY: ${DJANGO_SECRET_KEY}
+      ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
+      DATABASE_URL: ${DATABASE_URL}
     volumes:
       - cds_static:/app/static
-    command: sh -c "sleep 10 && /app/entrypoint.sh"
 
   cds_db:
     image: mariadb
@@ -26,13 +27,10 @@ services:
     networks:
       - cardsity
     environment:
-      MYSQL_USER: cds
-      MYSQL_DATABASE: cds
-      MYSQL_PASSWORD_FILE: /run/secrets/cds_db_pw
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/cds_db_root
-    secrets:
-      - cds_db_root
-      - cds_db_pw
+      MYSQL_USER: ${MYSQL_USERNAME}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - cds_db:/var/lib/mysql
 
@@ -66,12 +64,6 @@ services:
 volumes:
   cds_db:
   cds_static:
-
-secrets:
-  cds_db_root:
-    file: cds_db_root.txt
-  cds_db_pw:
-    file: cds_db_pw.txt
 
 networks:
   cardsity:
