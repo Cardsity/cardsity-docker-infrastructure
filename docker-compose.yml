@@ -17,7 +17,10 @@ services:
       SLEEP: "10"
       SECRET_KEY: ${DJANGO_SECRET_KEY}
       ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
-      DATABASE_URL: ${DJANGO_DATABASE_URL}
+      MYSQL_USERNAME: ${MYSQL_USERNAME}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_HOST: "cds_db:3306"
     volumes:
       - cds_static:/app/static
 
