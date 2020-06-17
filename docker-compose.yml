@@ -17,7 +17,7 @@ services:
       SLEEP: "10"
       SECRET_KEY: ${DJANGO_SECRET_KEY}
       ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS}
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: ${DJANGO_DATABASE_URL}
     volumes:
       - cds_static:/app/static
 
@@ -44,19 +44,21 @@ services:
     ports:
       - "9012:9012"
     volumes:
-    - ./ssl:/app/cert
+    - ./ssl:/app/cert:ro
 
   nginx:
-    build: .
+    build: Dockerfiles/nginx
     restart: always
     networks:
       - cardsity
     depends_on:
       - cds
+    environment:
+      HOST_DECK_SERVER: ${HOST_DECK_SERVER}
+      HOST_FRONTEND: ${HOST_FRONTEND}
     volumes:
       - cds_static:/var/www/deck-server:ro
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-      - /etc/letsencrypt/:/ssl/:ro
+      - ./ssl/:/ssl/:ro
     ports:
       - "80:80"
       - "443:443"

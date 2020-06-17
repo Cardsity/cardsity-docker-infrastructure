@@ -61,6 +61,10 @@ cat << EOF > cardsity.conf
 # Cardsity configuration
 # ======================
 
+# Host configuration
+HOST_FRONTEND=${FRONTEND_HOST}
+HOST_DECK_SERVER=${DECK_SERVER_HOST}
+
 # Django configuration
 DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
